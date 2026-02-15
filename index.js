@@ -1,36 +1,18 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-let meetingState = {
-  duration: 30,
-  startTime: null,
-  isRunning: false
-};
+app.get("/", (req, res) => {
+  res.send("Backend is running ✅");
+});
 
-// start timer
 app.post("/start", (req, res) => {
-  const { duration } = req.body;
-
-  meetingState.duration = duration;
-  meetingState.startTime = Date.now();
-  meetingState.isRunning = true;
-
-  res.json({ message: "Timer started", meetingState });
+  res.json({ message: "Timer started" });
 });
 
-// stop timer
-app.post("/stop", (req, res) => {
-  meetingState.isRunning = false;
-  res.json({ message: "Stopped" });
-});
-
-// get timer state
-app.get("/state", (req, res) => {
-  res.json(meetingState);
-});
-
-app.listen(5000, () => console.log("Server running on 5000"));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log("Server running on port " + PORT));
